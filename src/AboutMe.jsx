@@ -28,6 +28,14 @@ export default function AboutMe({ onClose }) {
     opacity:  0.08 + Math.random() * 0.12,
   }))
 
+  // Minneapolis, MN coordinates for the embedded map
+  const mapLat = 44.9778
+  const mapLng = -93.2650
+  const mapDelta = 0.08
+  const mapBbox = `${mapLng - mapDelta}%2C${mapLat - mapDelta}%2C${mapLng + mapDelta}%2C${mapLat + mapDelta}`
+  const mapEmbedSrc = `https://www.openstreetmap.org/export/embed.html?bbox=${mapBbox}&layer=mapnik&marker=${mapLat}%2C${mapLng}`
+  const mapLinkSrc = `https://www.openstreetmap.org/?mlat=${mapLat}&mlon=${mapLng}#map=12/${mapLat}/${mapLng}`
+
   return (
     <div
       style={{
@@ -43,12 +51,100 @@ export default function AboutMe({ onClose }) {
         overflow:        'hidden',
       }}
     >
-      {/* Keyframes for rain animation */}
+      {/* Keyframes for rain animation + responsive rules */}
       <style>
         {`
           @keyframes rainFall {
             0%   { transform: translateY(-10vh); }
             100% { transform: translateY(110vh); }
+          }
+
+          .aboutme-card-row {
+            display: flex;
+            gap: 14px;
+            overflow-x: auto;
+            padding-bottom: 16px;
+            margin-bottom: 36px;
+            -webkit-overflow-scrolling: touch;
+          }
+
+          .aboutme-contact-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 202;
+            background: rgba(255,255,255,0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-top: 2px solid #000;
+            padding: 10px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #000;
+            flex-wrap: wrap;
+            text-align: center;
+          }
+
+          .aboutme-contact-bar a {
+            color: #000;
+            text-decoration: none;
+            border-bottom: 2px solid transparent;
+            transition: border-color 0.15s ease;
+          }
+
+          .aboutme-contact-bar a:hover {
+            border-color: #000;
+          }
+
+          @media (max-width: 640px) {
+            .aboutme-content {
+              padding: 0 16px !important;
+            }
+
+            .aboutme-section-title {
+              font-size: 1.15rem !important;
+            }
+
+            .aboutme-card-row {
+              gap: 10px !important;
+              margin-bottom: 28px !important;
+            }
+
+            .aboutme-card-row > * {
+              min-width: 140px !important;
+            }
+
+            .aboutme-summary {
+              font-size: 0.92rem !important;
+              padding: 18px !important;
+            }
+
+            .aboutme-contact-bar {
+              gap: 8px !important;
+              font-size: 0.7rem !important;
+              padding: 8px 14px !important;
+            }
+
+            .aboutme-map-frame {
+              height: 220px !important;
+            }
+
+            .aboutme-back-btn {
+              top: 16px !important;
+              left: 16px !important;
+              padding: 5px 12px !important;
+              font-size: 0.75rem !important;
+            }
+
+            .aboutme-scroll-area {
+              padding-top: 72px !important;
+              padding-bottom: 64px !important;
+            }
           }
         `}
       </style>
@@ -81,6 +177,7 @@ export default function AboutMe({ onClose }) {
 
       {/* Scrollable content area */}
       <div
+        className="aboutme-scroll-area"
         style={{
           position:        'relative',
           zIndex:          2,
@@ -98,6 +195,7 @@ export default function AboutMe({ onClose }) {
         {/* Close / back button */}
         <button
           onClick={onClose}
+          className="aboutme-back-btn"
           style={{
             position:        'fixed',
             top:             '24px',
@@ -126,10 +224,32 @@ export default function AboutMe({ onClose }) {
         </button>
 
         {/* Content wrapper */}
-        <div style={{ width: '100%', maxWidth: '900px', padding: '0 24px', boxSizing: 'border-box' }}>
+        <div className="aboutme-content" style={{ width: '100%', maxWidth: '900px', padding: '0 24px', boxSizing: 'border-box' }}>
+
+          {/* Summary Section */}
+          <div
+            className="aboutme-summary"
+            style={{
+              background:      '#FFFFFF',
+              border:          '2px solid #000',
+              borderRadius:    '14px',
+              padding:         '24px',
+              boxShadow:       '3px 3px 0px #000',
+              marginBottom:    '36px',
+              fontSize:        '1rem',
+              lineHeight:      1.6,
+              fontWeight:      500,
+            }}
+          >
+            {/* TODO: replace with your own summary */}
+            Hi, I'm Sawyer — a developer and runner based in Minneapolis, MN. I build small tools and apps,
+            and I'm always working on something new. Take a look at my projects, PBs, and resume below,
+            or reach out using the links at the bottom of the page.
+          </div>
 
           {/* Projects Section */}
           <h2
+            className="aboutme-section-title"
             style={{
               fontSize:    '1.4rem',
               fontWeight:  800,
@@ -139,16 +259,7 @@ export default function AboutMe({ onClose }) {
           >
             Projects:
           </h2>
-          <div
-            style={{
-              display:        'flex',
-              gap:            '14px',
-              overflowX:       'auto',
-              paddingBottom:   '16px',
-              marginBottom:    '36px',
-              WebkitOverflowScrolling: 'touch',
-            }}
-          >
+          <div className="aboutme-card-row">
             {projects.map((p, i) => (
               <a
                 key={i}
@@ -196,6 +307,7 @@ export default function AboutMe({ onClose }) {
 
           {/* Running PBs Section */}
           <h2
+            className="aboutme-section-title"
             style={{
               fontSize:    '1.4rem',
               fontWeight:  800,
@@ -205,16 +317,7 @@ export default function AboutMe({ onClose }) {
           >
             Running PBs:
           </h2>
-          <div
-            style={{
-              display:        'flex',
-              gap:            '14px',
-              overflowX:       'auto',
-              paddingBottom:   '16px',
-              marginBottom:    '36px',
-              WebkitOverflowScrolling: 'touch',
-            }}
-          >
+          <div className="aboutme-card-row">
             {runningPBs.map((pb, i) => (
               <div
                 key={i}
@@ -241,8 +344,57 @@ export default function AboutMe({ onClose }) {
             ))}
           </div>
 
+          {/* Location Section */}
+          <h2
+            className="aboutme-section-title"
+            style={{
+              fontSize:    '1.4rem',
+              fontWeight:  800,
+              margin:      '0 0 14px 0',
+              color:       '#000',
+            }}
+          >
+            Location:
+          </h2>
+          <div
+            style={{
+              background:      '#FFFFFF',
+              border:          '2px solid #000',
+              borderRadius:    '14px',
+              padding:         '10px',
+              boxShadow:       '3px 3px 0px #000',
+              marginBottom:    '36px',
+              overflow:        'hidden',
+            }}
+          >
+            <iframe
+              className="aboutme-map-frame"
+              title="Map showing Minneapolis, MN"
+              src={mapEmbedSrc}
+              style={{
+                width:        '100%',
+                height:       '300px',
+                border:       '2px solid #000',
+                borderRadius: '10px',
+                display:      'block',
+              }}
+              loading="lazy"
+            />
+            <div style={{ marginTop: '10px', fontSize: '0.8rem', fontWeight: 600 }}>
+              <a
+                href={mapLinkSrc}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ color: '#000', textDecoration: 'underline' }}
+              >
+                View larger map — Minneapolis, MN
+              </a>
+            </div>
+          </div>
+
           {/* Resume Section */}
           <h2
+            className="aboutme-section-title"
             style={{
               fontSize:    '1.4rem',
               fontWeight:  800,
@@ -299,32 +451,10 @@ export default function AboutMe({ onClose }) {
       </div>
 
       {/* Sticky contact bar */}
-      <div
-        style={{
-          position:        'fixed',
-          bottom:          0,
-          left:            0,
-          right:           0,
-          zIndex:          202,
-          background:      'rgba(255,255,255,0.6)',
-          backdropFilter:  'blur(12px)',
-          WebkitBackdropFilter: 'blur(12px)',
-          borderTop:       '2px solid #000',
-          padding:         '10px 24px',
-          display:         'flex',
-          alignItems:      'center',
-          justifyContent:  'center',
-          gap:             '16px',
-          fontSize:        '0.8rem',
-          fontWeight:      600,
-          color:           '#000',
-          flexWrap:        'wrap',
-          textAlign:       'center',
-        }}
-      >
-        <span>sawyer11456@gmail.com</span>
+      <div className="aboutme-contact-bar">
+        <a href="mailto:sawyer11456@gmail.com">sawyer11456@gmail.com</a>
         <span style={{ opacity: 0.4 }}>|</span>
-        <span>612 444 3853</span>
+        <a href="tel:+16124443853">612 444 3853</a>
       </div>
     </div>
   )
