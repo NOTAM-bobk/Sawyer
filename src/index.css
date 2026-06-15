@@ -1,0 +1,174 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── Global resets ── */
+*, *::before, *::after { box-sizing: border-box; }
+
+body, html {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: #F4F1EA;
+}
+
+/* ── Custom cursor ── */
+.custom-cursor {
+  width: 24px;
+  height: 24px;
+  border: 3px solid #000;
+  background: #ff5e5b;
+  position: fixed;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 9999;
+  transition: background-color 0.1s, transform 0.15s;
+  display: none;
+  border-radius: 0;
+}
+
+@media (pointer: fine) {
+  .custom-cursor { display: block; }
+  body { cursor: none; }
+}
+
+/* ── Scrollbar hide ── */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* ── SVG gooey filter target ── */
+.liquid-container {
+  filter: url('#liquid-goo');
+  transition: filter 0.3s ease;
+}
+
+/* ── Dot wave ── */
+@keyframes wave {
+  0%, 60%, 100% { transform: translateY(0); }
+  30%           { transform: translateY(-4px); }
+}
+.dot:nth-child(1) { animation: wave 1.3s linear infinite 0s; }
+.dot:nth-child(2) { animation: wave 1.3s linear infinite -1.1s; }
+.dot:nth-child(3) { animation: wave 1.3s linear infinite -0.9s; }
+
+/* ── Rainbow ring — spins 1.5s then is fully gone, never comes back ── */
+@keyframes rainbowSpin {
+  0%   { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+@keyframes ringFadeOut {
+  0%   { opacity: 1; }
+  65%  { opacity: 1; }
+  100% { opacity: 0; visibility: hidden; }
+}
+
+.pill-ring {
+  position: absolute;
+  inset: -4px;
+  border-radius: 30px;
+  background: linear-gradient(
+    90deg,
+    #4285F4, #EA4335, #FBBC05, #34A853,
+    #4285F4, #EA4335, #FBBC05, #34A853,
+    #4285F4
+  );
+  background-size: 200% 100%;
+  /* spin + fade — both run simultaneously, fill=forwards so it stays hidden */
+  animation:
+    rainbowSpin 0.8s linear infinite,
+    ringFadeOut 1.5s ease-out forwards;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* ── Brand underline — scaleX draw-in then sweep-out ── */
+@keyframes underlineDraw {
+  0%   { transform: scaleX(0); transform-origin: left center;  }
+  42%  { transform: scaleX(1); transform-origin: left center;  }
+  58%  { transform: scaleX(1); transform-origin: right center; }
+  100% { transform: scaleX(0); transform-origin: right center; }
+}
+
+.brand-underline {
+  position: absolute;
+  bottom: -6px;
+  left: 0;
+  right: 0;
+  height: 5px;
+  background: #000;
+  border-radius: 3px;
+  transform: scaleX(0);
+  transform-origin: left center;
+  pointer-events: none;
+  will-change: transform;
+}
+
+/* Class added by React to trigger animation */
+.brand-underline.run {
+  animation: underlineDraw 0.95s cubic-bezier(0.77, 0, 0.18, 1) forwards;
+}
+
+/* ── Pill liquid morph transition ── */
+.pill-wrapper {
+  transition: height 0.75s cubic-bezier(0.19,1,0.22,1),
+              border-radius 0.75s cubic-bezier(0.19,1,0.22,1),
+              max-width 0.75s cubic-bezier(0.19,1,0.22,1);
+}
+
+/* ── Loading spinner ── */
+@keyframes spinnerRotate {
+  to { transform: rotate(360deg); }
+}
+.send-spinner {
+  width: 18px;
+  height: 18px;
+  border: 2.5px solid rgba(0,0,0,0.15);
+  border-top-color: #000;
+  border-radius: 50%;
+  animation: spinnerRotate 0.8s linear infinite;
+}
+
+/* ── Hint tooltips ── */
+@keyframes hintIn {
+  from { opacity: 0; transform: translateX(-50%) translateY(6px); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0);   }
+}
+@keyframes hintInAbove {
+  from { opacity: 0; transform: translateX(-50%) translateY(-6px); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0);    }
+}
+@keyframes hintOut {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+
+.hint-bubble {
+  position: absolute;
+  z-index: 40;
+  background: rgba(0,0,0,0.82);
+  color: #fff;
+  font-size: 0.72rem;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  padding: 5px 13px;
+  border-radius: 99px;
+  white-space: nowrap;
+  box-shadow: 2px 2px 0px #000;
+  pointer-events: none;
+  user-select: none;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.hint-bubble.below  { animation: hintIn      0.5s ease forwards; }
+.hint-bubble.above  { animation: hintInAbove 0.5s ease forwards; }
+.hint-bubble.fading { animation: hintOut     0.55s ease forwards; }
+
+/* ── Fade-in for chat bubbles ── */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.msg-fade { animation: fadeInUp 0.25s ease-out forwards; }
