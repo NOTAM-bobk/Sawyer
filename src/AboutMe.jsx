@@ -1,6 +1,33 @@
 // AboutMe.jsx — placeholder page, content to be added later
-
 export default function AboutMe({ onClose }) {
+  const projects = [
+    { name: 'MovieDB', repo: '#' },
+    { name: 'NeoEmail', repo: '#' },
+    { name: 'Promots.Optimzed', repo: '#' },
+    { name: 'Nimbus', repo: '#' },
+    { name: 'Flux.Chat', repo: '#' },
+    { name: 'Sproti.30', repo: '#' },
+    { name: 'URL-save', repo: '#' },
+    { name: 'Chinese-to-pinging', repo: '#' },
+  ]
+
+  const runningPBs = [
+    { distance: '800m', time: '1:58.46' },
+    { distance: '1500m', time: '4:23.06' },
+    { distance: '1600m', time: '4:28.67' },
+    { distance: '2 mile', time: '10:10' },
+    { distance: '5k', time: '17:00' },
+  ]
+
+  // Generate raindrops with randomized position, delay, duration
+  const raindrops = Array.from({ length: 40 }).map((_, i) => ({
+    left:     Math.random() * 100,
+    delay:    Math.random() * 5,
+    duration: 0.7 + Math.random() * 0.8,
+    height:   40 + Math.random() * 60,
+    opacity:  0.08 + Math.random() * 0.12,
+  }))
+
   return (
     <div
       style={{
@@ -11,44 +38,294 @@ export default function AboutMe({ onClose }) {
         display:         'flex',
         flexDirection:   'column',
         alignItems:      'center',
-        justifyContent:  'center',
         fontFamily:      "'Space Grotesk', sans-serif",
         animation:       'slideUp 0.45s cubic-bezier(0.19,1,0.22,1) forwards',
+        overflow:        'hidden',
       }}
     >
-      {/* Close / back button */}
-      <button
-        onClick={onClose}
+      {/* Keyframes for rain animation */}
+      <style>
+        {`
+          @keyframes rainFall {
+            0%   { transform: translateY(-10vh); }
+            100% { transform: translateY(110vh); }
+          }
+        `}
+      </style>
+
+      {/* Rain overlay */}
+      <div
         style={{
-          position:        'absolute',
-          top:             '24px',
-          left:            '24px',
-          display:         'flex',
-          alignItems:      'center',
-          gap:             '6px',
-          background:      'rgba(255,255,255,0.35)',
-          backdropFilter:  'blur(12px)',
-          WebkitBackdropFilter: 'blur(12px)',
-          border:          '2px solid #000',
-          borderRadius:    '999px',
-          padding:         '6px 16px',
-          fontFamily:      "'Space Grotesk', sans-serif",
-          fontWeight:      700,
-          fontSize:        '0.8rem',
-          cursor:          'pointer',
-          boxShadow:       '3px 3px 0px #000',
+          position:      'absolute',
+          inset:         0,
+          pointerEvents: 'none',
+          zIndex:        1,
+          overflow:      'hidden',
         }}
       >
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-          <polyline points="15 18 9 12 15 6"/>
-        </svg>
-        back
-      </button>
+        {raindrops.map((d, i) => (
+          <div
+            key={i}
+            style={{
+              position:   'absolute',
+              top:         0,
+              left:        `${d.left}%`,
+              width:       '1px',
+              height:      `${d.height}px`,
+              background:  `linear-gradient(to bottom, rgba(60,90,120,0), rgba(60,90,120,${d.opacity}))`,
+              animation:   `rainFall ${d.duration}s linear ${d.delay}s infinite`,
+            }}
+          />
+        ))}
+      </div>
 
-      {/* Placeholder content */}
-      <p style={{ color: '#000', opacity: 0.35, fontSize: '0.9rem', fontWeight: 600 }}>
-        content coming soon
-      </p>
+      {/* Scrollable content area */}
+      <div
+        style={{
+          position:        'relative',
+          zIndex:          2,
+          width:           '100%',
+          height:          '100%',
+          overflowY:       'auto',
+          display:         'flex',
+          flexDirection:   'column',
+          alignItems:      'center',
+          paddingTop:      '90px',
+          paddingBottom:   '70px',
+          boxSizing:       'border-box',
+        }}
+      >
+        {/* Close / back button */}
+        <button
+          onClick={onClose}
+          style={{
+            position:        'fixed',
+            top:             '24px',
+            left:            '24px',
+            display:         'flex',
+            alignItems:      'center',
+            gap:             '6px',
+            background:      'rgba(255,255,255,0.35)',
+            backdropFilter:  'blur(12px)',
+            WebkitBackdropFilter: 'blur(12px)',
+            border:          '2px solid #000',
+            borderRadius:    '999px',
+            padding:         '6px 16px',
+            fontFamily:      "'Space Grotesk', sans-serif",
+            fontWeight:      700,
+            fontSize:        '0.8rem',
+            cursor:          'pointer',
+            boxShadow:       '3px 3px 0px #000',
+            zIndex:          201,
+          }}
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="15 18 9 12 15 6"/>
+          </svg>
+          back
+        </button>
+
+        {/* Content wrapper */}
+        <div style={{ width: '100%', maxWidth: '900px', padding: '0 24px', boxSizing: 'border-box' }}>
+
+          {/* Projects Section */}
+          <h2
+            style={{
+              fontSize:    '1.4rem',
+              fontWeight:  800,
+              margin:      '0 0 14px 0',
+              color:       '#000',
+            }}
+          >
+            Projects:
+          </h2>
+          <div
+            style={{
+              display:        'flex',
+              gap:            '14px',
+              overflowX:       'auto',
+              paddingBottom:   '16px',
+              marginBottom:    '36px',
+              WebkitOverflowScrolling: 'touch',
+            }}
+          >
+            {projects.map((p, i) => (
+              <a
+                key={i}
+                href={p.repo}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  flex:            '0 0 auto',
+                  minWidth:        '160px',
+                  background:      '#FFFFFF',
+                  border:          '2px solid #000',
+                  borderRadius:    '14px',
+                  padding:         '16px',
+                  boxShadow:       '3px 3px 0px #000',
+                  textDecoration:  'none',
+                  color:           '#000',
+                  display:         'flex',
+                  flexDirection:   'column',
+                  justifyContent:  'space-between',
+                  gap:             '10px',
+                  cursor:          'pointer',
+                }}
+              >
+                <span style={{ fontWeight: 700, fontSize: '0.95rem' }}>
+                  {p.name}
+                </span>
+                <span
+                  style={{
+                    display:     'flex',
+                    alignItems:  'center',
+                    gap:         '6px',
+                    fontSize:    '0.75rem',
+                    fontWeight:  600,
+                    opacity:     0.6,
+                  }}
+                >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58 0-.29-.01-1.04-.02-2.04-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.73.08-.73 1.21.08 1.84 1.24 1.84 1.24 1.07 1.84 2.81 1.31 3.49 1 .11-.78.41-1.31.74-1.61-2.67-.3-5.47-1.34-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 016 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.66.24 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.6-2.81 5.63-5.49 5.92.43.37.81 1.1.81 2.22 0 1.61-.01 2.9-.01 3.29 0 .32.22.7.83.58A12 12 0 0024 12c0-6.63-5.37-12-12-12z"/>
+                  </svg>
+                  GitHub Repo
+                </span>
+              </a>
+            ))}
+          </div>
+
+          {/* Running PBs Section */}
+          <h2
+            style={{
+              fontSize:    '1.4rem',
+              fontWeight:  800,
+              margin:      '0 0 14px 0',
+              color:       '#000',
+            }}
+          >
+            Running PBs:
+          </h2>
+          <div
+            style={{
+              display:        'flex',
+              gap:            '14px',
+              overflowX:       'auto',
+              paddingBottom:   '16px',
+              marginBottom:    '36px',
+              WebkitOverflowScrolling: 'touch',
+            }}
+          >
+            {runningPBs.map((pb, i) => (
+              <div
+                key={i}
+                style={{
+                  flex:            '0 0 auto',
+                  minWidth:        '120px',
+                  background:      '#FFFFFF',
+                  border:          '2px solid #000',
+                  borderRadius:    '14px',
+                  padding:         '16px',
+                  boxShadow:       '3px 3px 0px #000',
+                  display:         'flex',
+                  flexDirection:   'column',
+                  gap:             '8px',
+                }}
+              >
+                <span style={{ fontWeight: 700, fontSize: '0.95rem' }}>
+                  {pb.distance}
+                </span>
+                <span style={{ fontSize: '1.1rem', fontWeight: 800 }}>
+                  {pb.time}
+                </span>
+              </div>
+            ))}
+          </div>
+
+          {/* Resume Section */}
+          <h2
+            style={{
+              fontSize:    '1.4rem',
+              fontWeight:  800,
+              margin:      '0 0 14px 0',
+              color:       '#000',
+            }}
+          >
+            Resume:
+          </h2>
+          <div
+            style={{
+              background:      '#FFFFFF',
+              border:          '2px solid #000',
+              borderRadius:    '14px',
+              padding:         '24px',
+              boxShadow:       '3px 3px 0px #000',
+              display:         'flex',
+              flexDirection:   'column',
+              alignItems:      'flex-start',
+              gap:             '12px',
+            }}
+          >
+            <span style={{ fontWeight: 700, fontSize: '1rem' }}>
+              Sawyer Schulz — Resume
+            </span>
+            <a
+              href="/SawyerSchulz_Resume.docx"
+              download
+              style={{
+                display:         'inline-flex',
+                alignItems:      'center',
+                gap:             '8px',
+                background:      '#F4F1EA',
+                border:          '2px solid #000',
+                borderRadius:    '999px',
+                padding:         '8px 18px',
+                fontWeight:      700,
+                fontSize:        '0.85rem',
+                color:           '#000',
+                textDecoration:  'none',
+                boxShadow:       '3px 3px 0px #000',
+              }}
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 3v12"/>
+                <polyline points="7 11 12 16 17 11"/>
+                <line x1="5" y1="21" x2="19" y2="21"/>
+              </svg>
+              Download Resume
+            </a>
+          </div>
+
+        </div>
+      </div>
+
+      {/* Sticky contact bar */}
+      <div
+        style={{
+          position:        'fixed',
+          bottom:          0,
+          left:            0,
+          right:           0,
+          zIndex:          202,
+          background:      'rgba(255,255,255,0.6)',
+          backdropFilter:  'blur(12px)',
+          WebkitBackdropFilter: 'blur(12px)',
+          borderTop:       '2px solid #000',
+          padding:         '10px 24px',
+          display:         'flex',
+          alignItems:      'center',
+          justifyContent:  'center',
+          gap:             '16px',
+          fontSize:        '0.8rem',
+          fontWeight:      600,
+          color:           '#000',
+          flexWrap:        'wrap',
+          textAlign:       'center',
+        }}
+      >
+        <span>sawyer11456@gmail.com</span>
+        <span style={{ opacity: 0.4 }}>|</span>
+        <span>612 444 3853</span>
+      </div>
     </div>
   )
 }
