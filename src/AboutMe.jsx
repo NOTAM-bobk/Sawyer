@@ -1,14 +1,14 @@
 // AboutMe.jsx — placeholder page, content to be added later
 export default function AboutMe({ onClose }) {
   const projects = [
-    { name: 'MovieDB', repo: '#' },
-    { name: 'NeoEmail', repo: '#' },
-    { name: 'Promots.Optimzed', repo: '#' },
-    { name: 'Nimbus', repo: '#' },
-    { name: 'Flux.Chat', repo: '#' },
-    { name: 'Sproti.30', repo: '#' },
-    { name: 'URL-save', repo: '#' },
-    { name: 'Chinese-to-pinging', repo: '#' },
+    { name: 'MovieDB', repo: 'https://github.com/NOTAM-bobk/MovieDB' },
+    { name: 'NeoEmail', repo: 'https://github.com/NOTAM-bobk/NeoEmail' },
+    { name: 'Promots.Optimzed', repo: 'https://github.com/NOTAM-bobk/Promots.Optimzed' },
+    { name: 'Nimbus', repo: 'https://github.com/NOTAM-bobk/Nimbus.' },
+    { name: 'Flux.Chat', repo: 'https://github.com/NOTAM-bobk/Flux.Chat' },
+    { name: 'Sproti.30', repo: 'https://github.com/NOTAM-bobk/Sproti.30' },
+    { name: 'URL-save', repo: 'https://github.com/NOTAM-bobk/URL-Save' },
+    { name: 'Chinese-to-pinging', repo: 'https://github.com/NOTAM-bobk/Chinese-to-pingying' },
   ]
 
   const runningPBs = [
